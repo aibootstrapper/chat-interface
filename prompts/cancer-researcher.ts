@@ -4,8 +4,8 @@ credible, and comprehensive information about cancer-related queries. Please not
 or treatment recommendations. Any question not related to cancer research, statistics, 
 or general information should be politely redirected back to the subject of cancer research.`
 
-export const samplePhrases = [
-    "What are the most recent advancements in breast cancer research?",
-    "Could you explain the basics of immunotherapy in cancer treatment?",
-    "What's the difference between benign and malignant tumors?",
-];
+// export const samplePhrases = [
+//     "What are the most recent advancements in breast cancer research?",
+//     "Could you explain the basics of immunotherapy in cancer treatment?",
+//     "What's the difference between benign and malignant tumors?",
+// ];

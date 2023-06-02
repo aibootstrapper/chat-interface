@@ -45,6 +45,14 @@ export function useChat() {
   function clear() {
     console.log("clear");
     setChatHistory([]);
+    fetch(API_PATH + 'reset', {
+      method: "POST",
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to clear memory on the backend');
+        }
+      })
   }
 
   /**
@@ -58,61 +66,32 @@ export function useChat() {
     ];
 
     setChatHistory(newHistory);
-    const status = newHistory.length === 1 ? "initial" : "continue";
-    console.log("condition: " + condition);
-    if (!condition) {
-      console.log("condition is empty");
-      const body = JSON.stringify({
-        condition: condition,
-      });
-      console.log("body: " + body);
-      fetch(API_PATH + "set_condition", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: body
+    const body = JSON.stringify({
+      // messages: newHistory.slice(-appConfig.historyLength),
+      message: message,
+    });
+    fetch(API_PATH, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        const chatContent = data.message;
+        setChatHistory((curr) => [
+          ...curr,
+          { role: "assistant", content: chatContent } as const,
+        ]);
+        setCurrentChat(null);
+        setState("idle");
       })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-          const chatContent = data.message;
-          setChatHistory((curr) => [
-            ...curr,
-            { role: "assistant", content: chatContent } as const,
-          ]);
-          setCurrentChat(null);
-          setState("idle");
-        })
-    } else {
-      const body = JSON.stringify({
-        // messages: newHistory.slice(-appConfig.historyLength),
-        message: message,
-        status: status,
+      .catch((error) => {
+        console.error('Error:', error);
+        setState("idle");
       });
-      fetch(API_PATH, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: body
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-          const chatContent = data.message;
-          setChatHistory((curr) => [
-            ...curr,
-            { role: "assistant", content: chatContent } as const,
-          ]);
-          setCurrentChat(null);
-          setState("idle");
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          setState("idle");
-        });
-    };
   };
 
 
