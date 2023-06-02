@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { appConfig } from "../../config.browser";
 import { eventNames } from "process";
 
-const API_PATH = "http://127.0.0.1:8000/";
+const API_PATH = "https://clinical-trials-agent-api.onrender.com/";
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
